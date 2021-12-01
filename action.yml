@@ -1,0 +1,21 @@
+name: Create app installation token
+description: Simple action to create app installation token
+inputs:
+  app_id:
+    description: GitHub app ID. Get it from app settings page.
+    required: true
+  private_key:
+    description: GitHub app private key (PEM formatted).
+    required: true
+  installation_id:
+    description: App installation ID within the repository. Available on the URL trying to edit an installation at https://github.com/apps/<APP NAME>/installations/new
+    required: true
+  repository_ids:
+    description: Repositories the installation token will have access to.
+    required: false
+outputs:
+  token:
+    description: Generated installation token.
+runs:
+  using: node12
+  main: dist/index.js
