@@ -4,13 +4,13 @@ inputs:
   app_id:
     description: GitHub app ID. Get it from app settings page.
     required: true
-  private_key:
+  app_private_key:
     description: GitHub app private key (PEM formatted).
     required: true
   installation_id:
     description: App installation ID within the repository. Available on the URL trying to edit an installation at https://github.com/apps/<APP NAME>/installations/new
     required: true
-  repository_ids:
+  repository_names:
     description: Repositories the installation token will have access to.
     required: false
 outputs:

@@ -1,4 +1,3 @@
-import { Octokit } from '@octokit/rest';
 import { createAppAuth } from '@octokit/auth-app';
 import {
   getInput, info, setFailed, setOutput, setSecret,
@@ -7,25 +6,21 @@ import {
 const appId = getInput('app_id', { required: true });
 const privateKey = getInput('app_private_key', { required: true });
 const installationId = getInput('installation_id', { required: true });
-const repositoryIds = getInput('repository_ids');
+const repositoryNames = getInput('repository_names');
 
-const appOctokit = new Octokit({
-  authStrategy: createAppAuth,
-  auth: {
-    appId,
-    privateKey,
-    installationId,
-  },
+const app = createAppAuth({
+  appId,
+  privateKey,
 });
 
-appOctokit.rest.apps.createInstallationAccessToken({
-  installation_id: installationId,
-  repository_ids: repositoryIds,
+app({
+  type: "installation",
+  repositoryNames
 }).then((response) => {
-  const { token } = response.data;
+  const { token, createdAt, expiresAt } = response;
   setSecret(token);
   setOutput('token', token);
-  info('Token generated successfully!');
+  info(`Token created at ${createdAt} and expiring at ${expiresAt}`)
 }).catch((error) => {
   if (typeof error === 'string' || error instanceof Error) {
     setFailed(error);
